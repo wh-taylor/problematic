@@ -13,8 +13,14 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "axios": "^1.8.1",
+    "dotenv": "^16.4.7",
+    "file-saver": "^2.0.5",
+    "katex": "^0.16.21",
+    "latex.js": "^0.12.6",
+    "latex2pdf": "^1.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-latex": "^2.0.0",
     "react-modal": "^3.16.3",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
@@ -45,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/react-modal": "^3.16.3"
   }
 }
