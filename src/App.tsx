@@ -48,7 +48,7 @@ function App(): React.JSX.Element {
     <div className="App">
       <div className="left-panel">
         <div className="header">
-          <h1>ProbleMatic</h1>
+          <a href="."><h1>ProbleMatic</h1></a>
           <p>Homework Problem & Answer Key <br/> Generator</p> 
         </div>
         

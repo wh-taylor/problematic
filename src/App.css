@@ -168,6 +168,10 @@ label {
   100% { transform: rotate(360deg); }
 }
 
+a {
+  text-decoration: none;
+}
+
 .instructions {
   font-size: 1.1rem;
   padding: 50px;
