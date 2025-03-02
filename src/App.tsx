@@ -113,7 +113,7 @@ function App(): React.JSX.Element {
                 rows={20}
                 cols={50}
                 value={response}
-                readOnly
+                onChange={(e) => setResponse(e.target.value)}
                 className="latex-textarea"
               />
             )}
