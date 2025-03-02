@@ -105,6 +105,7 @@ p {
   margin-top: 10px;
 }
 
+
 label {
   font-size: 1.1rem;
   color: #777;
@@ -165,6 +166,15 @@ label {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.instructions {
+  font-size: 1.1rem;
+  padding: 50px;
+}
+
+.instructions h1 {
+  color: #2d6b9e;
 }
 
 .PDFView {

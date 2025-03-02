@@ -17,9 +17,11 @@ function App(): React.JSX.Element {
     Write ${questions} ${multipleChoice ? 'multiple choice' : ''} homework question${questions === 1 ? '' : 's'} in LaTeX about the following: ${input}.
     Respond solely with the raw LaTeX code and do not make any other comments.
     Ensure that you are including the packages for the control sequences you are using.
-    When including code blocks, take extra care in ensuring that they are in the correct environment.
     Include a nicely formatted heading.
+    Set up maketitle properly.
     Ensure that every single special character, particularly percentages and number signs, is always escaped properly and does not cause bugs.
+    Do not specify programming language in code blocks.
+    Ensure that programming languages are handled properly in code blocks.
     Add a page for the answer key at the end of the document.
     Ensure that the answer key has answers for all questions that can be checked with by the professor.
     Use the exam document class.
@@ -60,7 +62,7 @@ function App(): React.JSX.Element {
             />
 
             <button onClick={handleSubmission} disabled={loading} className="submit-button">
-              Submit
+              Generate
             </button>
           </div>
 
@@ -126,10 +128,8 @@ function App(): React.JSX.Element {
       <div className="right-panel">
         {/* Display the loading wheel if loading */}
         {showInstructions && (
-          <div>
-            <h2>Instructions</h2>
-            <p>This program will generate a printable PDF with homework problems on the given topic.
-            </p>
+          <div className="instructions">
+            <h1>Try generating an assignment!</h1>
           </div>
         )}
         {loading && (
