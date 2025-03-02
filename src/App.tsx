@@ -19,14 +19,12 @@ function App(): React.JSX.Element {
     Ensure that you are including the packages for the control sequences you are using.
     When including code blocks, take extra care in ensuring that they are in the correct environment.
     Include a nicely formatted heading.
-    Ensure that all questions are completely written.
-    Ensure that every single special character, particularly percentages is always escaped properly and does not cause bugs.
+    Ensure that every single special character, particularly percentages and number signs, is always escaped properly and does not cause bugs.
     Add a page for the answer key at the end of the document.
     Ensure that the answer key has answers for all questions that can be checked with by the professor.
     Use the exam document class.
     Do NOT use "\\answer".
     If multiple choice, ensure that not all answers are the same letter, and never list "all of the above" as an option.
-    Double check your response and ensure there are no bugs.
   `;
   
   const handleSubmission = async () => {
