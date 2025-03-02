@@ -11,14 +11,13 @@ function App(): React.JSX.Element {
   const [multipleChoice, setMultipleChoice] = useState(false);
   const [loading, setLoading] = useState(false); // Loading state
   const [codeVisible, setCodeVisible] = useState(false);
-  const [showInstructions, setShowInstructions] = useState(true);
 
   const prompt = `
     Write ${questions} ${multipleChoice ? 'multiple choice' : ''} homework question${questions === 1 ? '' : 's'} in LaTeX about the following: ${input}.
     Respond solely with the raw LaTeX code and do not make any other comments.
     Ensure that you are including the packages for the control sequences you are using.
     Include a nicely formatted heading.
-    Set up maketitle properly.
+    Set up maketitle properly, but make the author field blank.
     Ensure that every single special character, particularly percentages and number signs, is always escaped properly and does not cause bugs.
     Do not specify programming language in code blocks.
     Ensure that programming languages are handled properly in code blocks.
@@ -30,18 +29,17 @@ function App(): React.JSX.Element {
   `;
   
   const handleSubmission = async () => {
-    setLoading(true); // Set loading to true when the request starts
-    setShowInstructions(false);
+    setLoading(true);
     setResponse('');
     
     console.log(`PROMPT: ${prompt}`);
     
     const rawResult = await generateResponse(prompt);
-    const result = rawResult.replace('```latex', '').replace('```', '');
-    console.log(`RESPONSE: ${getPDFURL(result)}`);
+    const result = rawResult.replace('```latex', '').replace('```', '').trim();
+    console.log(`RESPONSE: ${result}`);
     
     setResponse(result);
-    setLoading(false); // Set loading to false when the request completes
+    setLoading(false);
   };
 
   return (
@@ -96,21 +94,19 @@ function App(): React.JSX.Element {
               <option value="20">20</option>
             </select>
 
-            <label htmlFor="multipleChoice">Multiple Choice</label>
+            <label htmlFor="multipleChoice">All Multiple Choice</label>
             <input
               type="checkbox"
               className="multipleChoice"
               onChange={() => setMultipleChoice(!multipleChoice)} />
           </div>
 
-          {/* Show LaTeX Toggle Button */}
           <div className="toggle-latex">
             <button onClick={() => setCodeVisible(!codeVisible)} className="toggle-button">
               {codeVisible ? 'Hide' : 'Show'} LaTeX
             </button>
           </div>
 
-          {/* Display LaTeX code in textarea */}
           <div className="latex-code">
             {codeVisible && (
               <textarea
@@ -126,19 +122,11 @@ function App(): React.JSX.Element {
       </div>
 
       <div className="right-panel">
-        {/* Display the loading wheel if loading */}
-        {showInstructions && (
-          <div className="instructions">
-            <h1>Try generating an assignment!</h1>
-          </div>
-        )}
         {loading && (
           <div className="loading-wheel">
             <div className="spinner"></div>
-            <p>Generating the homework...</p>
           </div>
         )}
-        {/* Display the PDF if response is available */}
         <div className="PDFView">
           {response && !loading && (
             <embed src={getPDFURL(response)} width="100%" height="100%" />

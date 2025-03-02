@@ -27,7 +27,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f9f9f9;
+  background-color: #24242b;
   overflow: hidden;
 }
 
@@ -38,7 +38,7 @@ body {
 
 h1 {
   font-size: 3rem;
-  color: #2e3b4e;
+  color: #0b4191;
   margin: 0;
 }
 
@@ -91,12 +91,12 @@ p {
   
 }
 
-.submit-button:disabled {
-  background-color: #aaa;
-}
-
 .submit-button:hover {
   background-color: #2980b9;
+}
+
+.submit-button:disabled {
+  background-color: #aaa;
 }
 
 .input-specs {
@@ -109,7 +109,7 @@ p {
 label {
   font-size: 1.1rem;
   color: #777;
-  margin-top: 3px;
+  margin-top: 8px;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -124,6 +124,11 @@ label {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
+}
+
+input[type='checkbox'] {
+  width:30px;
+  height:30px;
 }
 
 .toggle-latex {
