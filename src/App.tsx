@@ -1,53 +1,155 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import generateResponse from './geminiRequest'
-import 'katex/dist/katex.min.css';  // Required for proper styling
+import generateResponse from './geminiRequest';
 
-const latexCode = `
-\\documentclass{article}
-\\usepackage{amsmath}
-\\begin{document}
-\\textbf{Problem 1:} Consider the quadratic equation $ax^2 + bx + c = 0$, where $a$, $b$, and $c$ are real numbers and $a \\neq 0$.
-\\begin{enumerate}
-    \\item Derive the quadratic formula for solving for $x$ in terms of $a$, $b$, and $c$. Show all steps of your derivation.
-    \\item Given the equation $2x^2 - 5x - 3 = 0$, use the quadratic formula to find the solutions for $x$. Show your work.
-    \\item Verify your solutions from part (b) by substituting them back into the original equation.
-    \\item For what values of $a$, $b$, and $c$ does the quadratic equation have:\\
-        \\begin{itemize}
-            \\item Two distinct real solutions?
-            \\item One real solution (repeated root)?
-            \\item No real solutions (complex conjugate roots)?
-        \\end{itemize}
-    Explain your reasoning in terms of the discriminant ($b^2 - 4ac$).
-\\end{enumerate}
-\\end{document}
-`;
+const getPDFURL = (latex: string): string => 'https://latexonline.cc/compile?text=' + encodeURIComponent(latex);
 
-
-function App() {
-  const [data, setData] = useState(null);
+function App(): React.JSX.Element {
+  const [response, setResponse] = useState('');
   const [input, setInput] = useState('');
+  const [questions, setQuestions] = useState(10);
+  const [multipleChoice, setMultipleChoice] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
+  const [codeVisible, setCodeVisible] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(true);
 
-  const handleButtonClick = async () => {
-    const result = await generateResponse(`Write a homework problem in LaTeX about the following: ${input}`);
-    setData(result);
+  const prompt = `
+    Write ${questions} ${multipleChoice ? 'multiple choice' : ''} homework question${questions === 1 ? '' : 's'} in LaTeX about the following: ${input}.
+    Respond solely with the raw LaTeX code and do not make any other comments.
+    Ensure that you are including the packages for the control sequences you are using.
+    When including code blocks, take extra care in ensuring that they are in the correct environment.
+    Include a nicely formatted heading.
+    Ensure that all questions are completely written.
+    Ensure that every single special character, particularly percentages is always escaped properly and does not cause bugs.
+    Add a page for the answer key at the end of the document.
+    Ensure that the answer key has answers for all questions that can be checked with by the professor.
+    Use the exam document class.
+    Do NOT use "\\answer".
+    If multiple choice, ensure that not all answers are the same letter, and never list "all of the above" as an option.
+    Double check your response and ensure there are no bugs.
+  `;
+  
+  const handleSubmission = async () => {
+    setLoading(true); // Set loading to true when the request starts
+    setShowInstructions(false);
+    setResponse('');
+    
+    console.log(`PROMPT: ${prompt}`);
+    
+    const rawResult = await generateResponse(prompt);
+    const result = rawResult.replace('```latex', '').replace('```', '');
+    console.log(`RESPONSE: ${getPDFURL(result)}`);
+    
+    setResponse(result);
+    setLoading(false); // Set loading to false when the request completes
   };
 
   return (
     <div className="App">
-      <input
-        placeholder='Input prompt'
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <button onClick={handleButtonClick}>Submit</button>
-      {/* <button onClick={generatePDF}>Download PDF</button> */}
-      
-      <p>{data}</p>
+      <div className="left-panel">
+        <div className="header">
+          <h1>ProbleMatic</h1>
+          <p>Homework Problem & Answer Key <br/> Generator</p> 
+        </div>
+        
+        <div className="input-section">
+          <div className="input-container">
+            <input
+              placeholder='Input topic'
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="input-field"
+            />
 
-      
+            <button onClick={handleSubmission} disabled={loading} className="submit-button">
+              Submit
+            </button>
+          </div>
+
+          <div className="input-specs">
+            <label htmlFor="qnumber">Questions </label>
+            <select
+              name="qnumber"
+              id="qnumber"
+              className="qnumber"
+              defaultValue={questions}
+              onChange={(e) => setQuestions(parseInt(e.target.value))}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+              <option value="19">19</option>
+              <option value="20">20</option>
+            </select>
+
+            <label htmlFor="multipleChoice">Multiple Choice</label>
+            <input
+              type="checkbox"
+              className="multipleChoice"
+              onChange={() => setMultipleChoice(!multipleChoice)} />
+          </div>
+
+          {/* Show LaTeX Toggle Button */}
+          <div className="toggle-latex">
+            <button onClick={() => setCodeVisible(!codeVisible)} className="toggle-button">
+              {codeVisible ? 'Hide' : 'Show'} LaTeX
+            </button>
+          </div>
+
+          {/* Display LaTeX code in textarea */}
+          <div className="latex-code">
+            {codeVisible && (
+              <textarea
+                rows={20}
+                cols={50}
+                value={response}
+                readOnly
+                className="latex-textarea"
+              />
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="right-panel">
+        {/* Display the loading wheel if loading */}
+        {showInstructions && (
+          <div>
+            <h2>Instructions</h2>
+            <p>This program will generate a printable PDF with homework problems on the given topic.
+            </p>
+          </div>
+        )}
+        {loading && (
+          <div className="loading-wheel">
+            <div className="spinner"></div>
+            <p>Generating the homework...</p>
+          </div>
+        )}
+        {/* Display the PDF if response is available */}
+        <div className="PDFView">
+          {response && !loading && (
+            <embed src={getPDFURL(response)} width="100%" height="100%" />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
 export default App;
+

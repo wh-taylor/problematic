@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-const postData = async (input: string) => {
+const generateResponse = async (input: string) => {
     try {
         const dataToSend = {
             'contents': [{
@@ -11,9 +11,8 @@ const postData = async (input: string) => {
         const responseData: any = response.data;
         return responseData['candidates'][0]['content']['parts'][0]['text'];
     } catch (error) {
-        // Handle the error
         return "Error!!!";
     }
 };
 
-export default postData
+export default generateResponse
